@@ -42,13 +42,14 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   // Allow public routes
   if (publicRoutes.includes(pathname)) {
+    console.log("Public routes");
     return NextResponse.next();
   }
 
-  //   // Only check token for API routes
-  //   if (!pathname.startsWith("/api/")) {
-  //     return NextResponse.next(); // Skip non-API routes
-  //   }
+  // Only check token for API routes
+  if (!pathname.startsWith("/api/")) {
+    return NextResponse.next(); // Skip non-API routes
+  }
 
   const token = request.cookies.get(COOKIE_KEYS.ACCESS_TOKEN)?.value;
   const expiresAt = request.cookies.get(COOKIE_KEYS.EXPIRES_AT)?.value;

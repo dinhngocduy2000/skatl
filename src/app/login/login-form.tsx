@@ -1,5 +1,5 @@
+"use client";
 import { cn } from "@/lib/utils";
-import Form from "next/form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,12 +9,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
+import { useForm } from "react-hook-form";
+import { LoginFields } from "@/lib/schemas/login-schema";
+import { toast } from "react-toastify";
+import FormInputContainer from "@/components/reusable/form-input-container";
+import Link from "next/link";
+import { handleLogin } from "@/lib/api/auth";
+import { COOKIE_KEYS } from "@/lib/enum/cookie-keys";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
+import { ROUTE_PATH } from "@/lib/enum/route-path";
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useRouter();
+  const {
+    control,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm<LoginFields>({
+    mode: "onChange",
+  });
+  const handleOnLoginSubmit = async (data: LoginFields) => {
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("password", data.password);
+
+    try {
+      const res = await handleLogin(formData);
+      toast.success("Login success");
+      Cookie.set(COOKIE_KEYS.ACCESS_TOKEN, res.access_token, {
+        expires: Number(res.expires_at),
+      });
+      navigate.replace(ROUTE_PATH.HOME);
+    } catch (error) {
+      toast.error("Error");
+      console.log(error);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -25,7 +59,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form action={"#"}>
+          <form action={""} onSubmit={handleSubmit(handleOnLoginSubmit)}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -53,30 +87,56 @@ export function LoginForm({
                 </span>
               </div>
               <div className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                  />
-                </div>
-                <div className="grid gap-3">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
-                      className="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </a>
-                  </div>
-                  <Input id="password" type="password" required />
-                </div>
-                <Button type="submit" className="w-full">
+                <FormInputContainer<LoginFields>
+                  control={control}
+                  errors={errors}
+                  name="username"
+                  vertialAlign
+                  required
+                  label="Username"
+                  render={({ field }) => (
+                    <Input
+                      id="username"
+                      name="username"
+                      placeholder="m@example.com"
+                      required
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+                <FormInputContainer<LoginFields>
+                  control={control}
+                  errors={errors}
+                  name="password"
+                  vertialAlign
+                  required
+                  label="Password"
+                  render={({ field }) => (
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="********"
+                      required
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+
+                <Button
+                  disabled={isSubmitting}
+                  type="submit"
+                  loading={isSubmitting}
+                  className="w-full"
+                >
                   Login
                 </Button>
+                <Link
+                  className="mx-auto flex min-w-fit text-xs font-medium underline underline-offset-2"
+                  href={"#"}
+                >
+                  Forgot your password?
+                </Link>
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
@@ -85,7 +145,7 @@ export function LoginForm({
                 </a>
               </div>
             </div>
-          </Form>
+          </form>
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
