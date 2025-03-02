@@ -16,14 +16,14 @@
   --card-foreground: #1f252a;
   --popover: #ffffff;
   --popover-foreground: #1f252a;
-  --primary: #2f3640;
-  --primary-foreground: #f9f9fb;
+  --primary: #567c8d;
+  --primary-foreground: #ededed;
   --secondary: #f0f0f4;
-  --secondary-foreground: #2f3640;
+  --secondary-foreground: #567c8d;
   --muted: #f0f0f4;
   --muted-foreground: #858a95;
   --accent: #f0f0f4;
-  --accent-foreground: #2f3640;
+  --accent-foreground: #567c8d;
   --destructive: #e6512a;
   --destructive-foreground: #e6512a; /* Note: Same as --destructive, might want contrast */
   --border: #e5e6eb;
@@ -35,31 +35,31 @@
   --chart-4: #c8cb45;
   --chart-5: #c7a736;
   --radius: 0.625rem;
-  --sidebar: #f9f9fb;
+  --sidebar: #ededed;
   --sidebar-foreground: #1f252a;
-  --sidebar-primary: #2f3640;
-  --sidebar-primary-foreground: #f9f9fb;
+  --sidebar-primary: #567c8d;
+  --sidebar-primary-foreground: #ededed;
   --sidebar-accent: #f0f0f4;
-  --sidebar-accent-foreground: #2f3640;
+  --sidebar-accent-foreground: #567c8d;
   --sidebar-border: #e5e6eb;
   --sidebar-ring: #a9adb6;
 }
 
 .dark {
   --background: #1f252a;
-  --foreground: #f9f9fb;
+  --foreground: #ededed;
   --card: #1f252a;
-  --card-foreground: #f9f9fb;
+  --card-foreground: #ededed;
   --popover: #1f252a;
-  --popover-foreground: #f9f9fb;
-  --primary: #f9f9fb;
-  --primary-foreground: #2f3640;
+  --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #567c8d;
   --secondary: #3f4752;
-  --secondary-foreground: #f9f9fb;
+  --secondary-foreground: #ededed;
   --muted: #3f4752;
   --muted-foreground: #a9adb6;
   --accent: #3f4752;
-  --accent-foreground: #f9f9fb;
+  --accent-foreground: #ededed;
   --destructive: #963c27;
   --destructive-foreground: #eb5c2f;
   --border: #3f4752;
@@ -70,12 +70,12 @@
   --chart-3: #c7a736;
   --chart-4: #885bd1;
   --chart-5: #e6692d;
-  --sidebar: #2f3640;
-  --sidebar-foreground: #f9f9fb;
+  --sidebar: #567c8d;
+  --sidebar-foreground: #ededed;
   --sidebar-primary: #2d63a8;
-  --sidebar-primary-foreground: #f9f9fb;
+  --sidebar-primary-foreground: #ededed;
   --sidebar-accent: #3f4752;
-  --sidebar-accent-foreground: #f9f9fb;
+  --sidebar-accent-foreground: #ededed;
   --sidebar-border: #3f4752;
   --sidebar-ring: #676f7b;
 }
