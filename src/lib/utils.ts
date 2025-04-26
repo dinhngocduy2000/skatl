@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
-export const defaultMetadata: Metadata = {
+export const DefaultMetadata: Metadata = {
   title: "SkatL",
   description: "Modern task management app - What ever you do, we track",
   keywords: [

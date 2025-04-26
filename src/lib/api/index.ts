@@ -1,77 +1,117 @@
-// export const handleLogin =
-
-import { COOKIE_KEYS } from "@/lib/enum/cookie-keys";
-
-// Base configuration
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { COOKIE_KEYS } from "../enum/cookie-keys";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Set in .env
-// Check and refresh token
-// export const handleCheckToken = async (): Promise<string> => {
-//   const cookie = Cookies; // Using js-cookie
-//   const token = cookie.get(COOKIE_KEYS.ACCESS_TOKEN);
-//   const expiresAt = cookie.get(COOKIE_KEYS.EXPIRES_AT);
 
-//   const isExpired = !token || !expiresAt || Date.now() > Number(expiresAt);
-
-//   if (isExpired) {
-//     try {
-//       const newToken = await getRefreshToken();
-//       return newToken;
-//     } catch (error) {
-//       console.error("Token refresh failed:", error);
-//       throw error; // Let caller handle (e.g., redirect to login)
-//     }
-//   }
-
-//   return token; // Return existing valid token
-// };
-// Generic fetch wrapper
-async function fetchAPI<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const accessToken = localStorage.getItem(COOKIE_KEYS.ACCESS_TOKEN);
-  const url = `${BASE_URL}${endpoint}`;
-  const defaultOptions: RequestInit = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    ...options, // Merge custom options (e.g., method, body)
-  };
-
-  try {
-    const response = await fetch(url, defaultOptions);
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        errorData.message || `HTTP error! Status: ${response.status}`
-      );
+const axiosConfig = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+// Add a request interceptor
+axiosConfig.interceptors.request.use(
+  function (config) {
+    const accessToken =
+      sessionStorage.getItem(COOKIE_KEYS.ACCESS_TOKEN) ??
+      localStorage.getItem(COOKIE_KEYS.ACCESS_TOKEN);
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
-    return response.json() as Promise<T>;
-  } catch (error) {
-    console.error(`API call failed: ${endpoint}`, error);
-    throw error; // Let the caller handle the error
+    // Do something before request is sent
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
   }
-}
+);
+// Add a response interceptor
+axiosConfig.interceptors.response.use(
+  function (response: AxiosResponse) {
+    return response.data;
+  },
+  async function (error) {
+    if (!error.response) {
+      return Promise.reject(error);
+    }
+    switch (error.response.status) {
+      case 403:
+        return await handleRenewToken(error);
+      case 404:
+        break;
+      case 401:
+        // Refetch token with access token
+        break;
+      case 500:
+        break;
+      default:
+        break;
+    }
 
-// Specific API methods
-export const apiConfig = {
-  // POST request (e.g., for login)
-  post: <T>(endpoint: string, body: BodyInit, headers?: HeadersInit) =>
-    fetchAPI<T>(endpoint, {
-      method: "POST",
-      body: body,
-      headers,
-    }),
+    return Promise.reject(error);
+  }
+);
 
-  // GET request (e.g., for fetching user data)
-  get: <T>(endpoint: string, header?: HeadersInit) =>
-    fetchAPI<T>(endpoint, {
-      method: "GET",
-    }),
+export const axiosConfigWithoutAuth = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-  // Add more methods as needed (PUT, DELETE, etc.)
+export const axiosSupabaseConfig = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+axiosSupabaseConfig.interceptors.response.use(
+  function (response: AxiosResponse) {
+    return response.data;
+  },
+  async function (error) {
+    return Promise.reject(error);
+  }
+);
+
+const renewToken = async () => {
+  const refreshTokenFromSession = sessionStorage.getItem(
+    COOKIE_KEYS.REFRESH_TOKEN
+  );
+  const refreshTokenFromLocal = localStorage.getItem(COOKIE_KEYS.REFRESH_TOKEN);
+
+  // const res: UserCredential = await refreshTokenFunction({
+  //   token: refreshTokenFromLocal ?? refreshTokenFromSession ?? "",
+  // });
+  // saveToStorages(
+  //   COOKIE_KEYS.ACCESS_TOKEN,
+  //   res.token,
+  //   Boolean(refreshTokenFromLocal)
+  // ); // if refreshToken is store from local === the session is save
+  // saveToStorages(
+  //   COOKIE_KEYS.REFRESH_TOKEN,
+  //   res.refresh_token,
+  //   Boolean(refreshTokenFromLocal)
+  // ); // if refreshToken is store from local === the session is save
+
+  // return res.token;
+  return "";
 };
 
-export default apiConfig;
+const handleRenewToken = async (error: unknown) => {
+  if (!(error instanceof AxiosError)) {
+    return;
+  }
+  const axiosError: AxiosError = error;
+  const originalRequest = axiosError.config;
+  if (!originalRequest) {
+    return;
+  }
+  const newAccessToken = await renewToken();
+  originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+  return await axiosConfig(originalRequest);
+};
+
+export default axiosConfig;

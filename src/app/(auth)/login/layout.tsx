@@ -1,4 +1,4 @@
-import { defaultMetadata } from "@/lib/utils";
+import { DefaultMetadata } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 const geistSans = Geist({
@@ -10,7 +10,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = defaultMetadata;
+export const metadata: Metadata = DefaultMetadata;
 
 export default function LoginLayout({
   children,
@@ -19,6 +19,16 @@ export default function LoginLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="mR4qYmtt6qpoWPEbihH5MBmLrmkuuUpYfsSH7gcXKE0"
+        />
+        <meta
+          name="description"
+          content="Modern task management app - What ever you do, we track"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

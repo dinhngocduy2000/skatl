@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { LoginFields } from "@/lib/schemas/login-schema";
+import { LoginFields, loginSchema } from "@/lib/schemas/login-schema";
 import { toast } from "react-toastify";
 import FormInputContainer from "@/components/reusable/form-input-container";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import { COOKIE_KEYS } from "@/lib/enum/cookie-keys";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { ROUTE_PATH } from "@/lib/enum/route-path";
+import { zodResolver } from "@hookform/resolvers/zod";
 export function LoginForm({
   className,
   ...props
@@ -30,14 +31,12 @@ export function LoginForm({
     handleSubmit,
   } = useForm<LoginFields>({
     mode: "onChange",
+    resolver: zodResolver(loginSchema),
   });
   const handleOnLoginSubmit = async (data: LoginFields) => {
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("password", data.password);
-
+    console.log(data);
     try {
-      const res = await handleLogin(formData);
+      const res = await handleLogin(data);
       toast.success("Login success");
       Cookie.set(COOKIE_KEYS.ACCESS_TOKEN, res.access_token, {
         expires: Number(res.expires_at),
@@ -90,14 +89,14 @@ export function LoginForm({
                 <FormInputContainer<LoginFields>
                   control={control}
                   errors={errors}
-                  name="username"
+                  name="email"
                   vertialAlign
                   required
-                  label="Username"
+                  label="email"
                   render={({ field }) => (
                     <Input
-                      id="username"
-                      name="username"
+                      id="email"
+                      name="email"
                       placeholder="m@example.com"
                       required
                       onChange={field.onChange}

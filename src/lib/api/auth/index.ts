@@ -1,13 +1,13 @@
 import { LoginFields } from "@/lib/schemas/login-schema";
-import apiConfig from "..";
 import { AUTH_ENDPOINTS } from "@/lib/enum/endpoints";
+import axiosConfig from "..";
 
 export const handleLogin = async (
-  credentials: FormData
+  credentials: LoginFields
 ): Promise<{
   access_token: string;
   token_type: string;
   expires_at: string;
 }> => {
-  return await apiConfig.post(AUTH_ENDPOINTS.LOGIN, credentials);
+  return await axiosConfig.post(AUTH_ENDPOINTS.LOGIN, credentials);
 };
