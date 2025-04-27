@@ -30,13 +30,7 @@ export const useInfiniteScroll = ({
     return () => {
       observerRef.current?.disconnect();
     };
-  }, [
-    ...dependencyKeys,
-    loaderRef.current,
-    hasMore,
-    isFetchingData,
-    onPageChange,
-  ]);
+  }, [...dependencyKeys, hasMore, isFetchingData, onPageChange]);
 
   return { loaderRef };
 };

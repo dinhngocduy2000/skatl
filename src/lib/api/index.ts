@@ -77,10 +77,10 @@ axiosSupabaseConfig.interceptors.response.use(
 );
 
 const renewToken = async () => {
-  const refreshTokenFromSession = sessionStorage.getItem(
-    COOKIE_KEYS.REFRESH_TOKEN
-  );
-  const refreshTokenFromLocal = localStorage.getItem(COOKIE_KEYS.REFRESH_TOKEN);
+  // const refreshTokenFromSession = sessionStorage.getItem(
+  //   COOKIE_KEYS.REFRESH_TOKEN
+  // );
+  // const refreshTokenFromLocal = localStorage.getItem(COOKIE_KEYS.REFRESH_TOKEN);
 
   // const res: UserCredential = await refreshTokenFunction({
   //   token: refreshTokenFromLocal ?? refreshTokenFromSession ?? "",

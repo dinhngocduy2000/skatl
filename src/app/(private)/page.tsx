@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {};
-
-const HomePage = async (props: Props) => {
+const HomePage = async () => {
   return <div>HomePage</div>;
 };
 
