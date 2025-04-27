@@ -22,7 +22,6 @@ import {
 import { TeamSwitcher } from "./team-switcher";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
-import { NavUser } from "./nav-user";
 
 // This is sample data.
 const data = {
@@ -50,7 +49,7 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Overview",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -70,7 +69,7 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Board",
       url: "#",
       icon: Bot,
       items: [
@@ -84,6 +83,29 @@ const data = {
         },
         {
           title: "Quantum",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Calendar",
+      url: "#",
+      icon: BookOpen,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+        {
+          title: "Get Started",
+          url: "#",
+        },
+        {
+          title: "Tutorials",
+          url: "#",
+        },
+        {
+          title: "Changelog",
           url: "#",
         },
       ],
@@ -112,42 +134,29 @@ const data = {
       ],
     },
     {
-      title: "Settings",
+      title: "Inbox",
       url: "#",
       icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+    },
+    {
+      title: "Feedbacks",
+      url: "#",
+      icon: Settings2,
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Projects",
       url: "#",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      name: "Members",
       url: "#",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      name: "Feedbacks",
       url: "#",
       icon: Map,
     },
@@ -164,11 +173,9 @@ export function AppSidebarComponent({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavProjects items={data.projects} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooter></SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
