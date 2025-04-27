@@ -10,9 +10,14 @@ export const loginAction = async (data: LoginFields) => {
   try {
     const res = await handleLogin(data);
     const cookieStore = await cookies();
+
     // Set the cookie
-    cookieStore.set(COOKIE_KEYS.ACCESS_TOKEN, res.access_token, {
-      expires: Number(res.expires_at),
+    cookieStore.set({
+      name: COOKIE_KEYS.ACCESS_TOKEN,
+      value: res.access_token,
+      expires: new Date(res.expired_at),
+      path: "/",
+      httpOnly: true,
     });
     return {
       success: true,
