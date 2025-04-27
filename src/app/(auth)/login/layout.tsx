@@ -2,6 +2,7 @@ import { DefaultMetadata } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../globals.css";
+import ToastProvider from "@/app/toast-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function LoginLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main className="flex h-screen w-screen items-center justify-center bg-muted">
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </main>
       </body>
     </html>

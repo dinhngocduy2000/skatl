@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { COOKIE_KEYS } from "../enum/cookie-keys";
+import { cookies } from "next/headers";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Set in .env
 
 const axiosConfig = axios.create({
@@ -10,10 +11,9 @@ const axiosConfig = axios.create({
 });
 // Add a request interceptor
 axiosConfig.interceptors.request.use(
-  function (config) {
-    const accessToken =
-      sessionStorage.getItem(COOKIE_KEYS.ACCESS_TOKEN) ??
-      localStorage.getItem(COOKIE_KEYS.ACCESS_TOKEN);
+  async function (config) {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(COOKIE_KEYS.ACCESS_TOKEN);
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }

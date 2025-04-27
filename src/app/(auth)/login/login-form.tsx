@@ -14,12 +14,10 @@ import { LoginFields, loginSchema } from "@/lib/schemas/login-schema";
 import { toast } from "react-toastify";
 import FormInputContainer from "@/components/reusable/form-input-container";
 import Link from "next/link";
-import { handleLogin } from "@/lib/api/auth";
-import { COOKIE_KEYS } from "@/lib/enum/cookie-keys";
-import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { ROUTE_PATH } from "@/lib/enum/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginAction } from "@/actions/auth";
 export function LoginForm({
   className,
   ...props
@@ -34,18 +32,12 @@ export function LoginForm({
     resolver: zodResolver(loginSchema),
   });
   const handleOnLoginSubmit = async (data: LoginFields) => {
-    console.log(data);
-    try {
-      const res = await handleLogin(data);
-      toast.success("Login success");
-      Cookie.set(COOKIE_KEYS.ACCESS_TOKEN, res.access_token, {
-        expires: Number(res.expires_at),
-      });
-      navigate.replace(ROUTE_PATH.HOME);
-    } catch (error) {
-      toast.error("Error");
-      console.log(error);
+    const res = await loginAction(data);
+    if (res.error) {
+      toast.error(res.error);
+      return;
     }
+    navigate.replace(ROUTE_PATH.HOME);
   };
 
   return (
@@ -58,7 +50,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={""} onSubmit={handleSubmit(handleOnLoginSubmit)}>
+          <form onSubmit={handleSubmit(handleOnLoginSubmit)}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
