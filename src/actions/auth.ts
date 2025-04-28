@@ -18,6 +18,7 @@ export const loginAction = async (data: LoginFields) => {
       expires: new Date(res.expired_at),
       path: "/",
       httpOnly: true,
+      sameSite: "lax",
     });
     return {
       success: true,

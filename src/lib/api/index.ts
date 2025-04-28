@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { COOKIE_KEYS } from "../enum/cookie-keys";
 import { cookies } from "next/headers";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Set in .env
 
@@ -8,14 +7,15 @@ const axiosConfig = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 // Add a request interceptor
 axiosConfig.interceptors.request.use(
   async function (config) {
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get(COOKIE_KEYS.ACCESS_TOKEN);
+    const accessToken = cookieStore.toString();
     if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+      config.headers["Cookie"] = `Bearer ${accessToken}`;
     }
 
     // Do something before request is sent

@@ -6,5 +6,7 @@ import { LoginResponse } from "@/lib/interfaces/auth";
 export const handleLogin = async (
   credentials: LoginFields
 ): Promise<LoginResponse> => {
-  return await axiosConfig.post(AUTH_ENDPOINTS.LOGIN, credentials);
+  return await axiosConfig.post(AUTH_ENDPOINTS.LOGIN, credentials, {
+    withCredentials: true,
+  });
 };

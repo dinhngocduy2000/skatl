@@ -13,7 +13,7 @@ import { NavUser } from "./nav-user";
 const user = {
   name: "shadcn",
   email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
+  avatar: "",
 };
 const HeaderComponent = () => {
   return (
