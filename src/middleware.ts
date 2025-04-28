@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { COOKIE_KEYS } from "./lib/enum/cookie-keys";
+import { ROUTE_PATH } from "./lib/enum/route-path";
 
 const publicRoutes = ["/login", "/signup"];
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get(COOKIE_KEYS.ACCESS_TOKEN)?.value;
-  const expiresAt = request.cookies.get(COOKIE_KEYS.EXPIRES_AT)?.value;
   console.log(`CHECK TOKEN: ${token}`);
   const { pathname } = request.nextUrl;
   // Allow public routes
   if (publicRoutes.includes(pathname)) {
-    console.log("Public routes");
+    if (token) {
+      return NextResponse.redirect(new URL(ROUTE_PATH.HOME, request.url));
+    }
     return NextResponse.next();
   }
 
   console.log(`CHECK TOKEN: ${token}`);
   // Check if token is missing or expired
-  if (!token || !expiresAt) {
+  if (!token) {
     console.log("NO TOKEN or EXPIRED for:", pathname);
 
     // Refresh failed, redirect to login
@@ -38,6 +40,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
