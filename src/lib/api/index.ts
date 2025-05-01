@@ -1,5 +1,5 @@
+import { getAccessTokenCookie } from "@/actions/cookie";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { cookies } from "next/headers";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Set in .env
 
 const axiosConfig = axios.create({
@@ -12,10 +12,11 @@ const axiosConfig = axios.create({
 // Add a request interceptor
 axiosConfig.interceptors.request.use(
   async function (config) {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.toString();
+    const accessToken = await getAccessTokenCookie();
+    console.log("CHECKING TOKEN: ", accessToken);
     if (accessToken) {
       config.headers["Cookie"] = `Bearer ${accessToken}`;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
     // Do something before request is sent
