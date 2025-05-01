@@ -60,7 +60,7 @@ const FormInputContainer = <T extends FieldValues>({
     <div
       className={cn(
         "flex w-full",
-        vertialAlign ? "flex-col gap-1" : "flex-row justify-center  gap-2",
+        vertialAlign ? "flex-col gap-1" : "flex-row justify-center gap-2",
         containerClassName && containerClassName
       )}
     >
@@ -70,7 +70,9 @@ const FormInputContainer = <T extends FieldValues>({
           vertialAlign ? "w-fit" : "mt-0"
         )}
       >
-        <Label htmlFor={name}>{label}</Label>
+        <Label className="h-fit" htmlFor={name}>
+          {label}
+        </Label>
         {required && label !== "" && <span className="text-red-400">*</span>}
       </p>
       <div className="flex flex-col gap-2">

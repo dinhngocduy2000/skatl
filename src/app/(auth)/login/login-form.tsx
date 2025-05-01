@@ -113,7 +113,31 @@ export function LoginForm({
                     />
                   )}
                 />
-
+                <div className="flex w-full justify-between">
+                  <div>
+                    <FormInputContainer
+                      control={control}
+                      errors={errors}
+                      name="saveSession"
+                      label="Remember me"
+                      containerClassName="flex-row-reverse"
+                      render={({ field }) => (
+                        <Input
+                          id="saveSession"
+                          className="h-fit"
+                          type="checkbox"
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </div>
+                  <Link
+                    className="flex min-w-fit text-xs font-medium underline underline-offset-2"
+                    href={"#"}
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
                 <Button
                   disabled={isSubmitting}
                   type="submit"
@@ -122,12 +146,6 @@ export function LoginForm({
                 >
                   Login
                 </Button>
-                <Link
-                  className="mx-auto flex min-w-fit text-xs font-medium underline underline-offset-2"
-                  href={"#"}
-                >
-                  Forgot your password?
-                </Link>
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}

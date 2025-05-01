@@ -15,7 +15,7 @@ export const loginAction = async (data: LoginFields) => {
     cookieStore.set({
       name: COOKIE_KEYS.ACCESS_TOKEN,
       value: res.access_token,
-      expires: new Date(res.expired_at),
+      expires: data.saveSession ? new Date(res.expired_at) : undefined,
       path: "/",
       httpOnly: true,
       sameSite: "lax",
