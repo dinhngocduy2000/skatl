@@ -1,5 +1,11 @@
-import { getAccessTokenCookie } from "@/actions/cookie";
+import {
+  getAccessTokenCookie,
+  getRefreshTokenCookie,
+  getSaveSessionCookie,
+} from "@/actions/cookie";
+import { refreshTokenAction } from "@/actions/refresh-token";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { COOKIE_KEYS } from "../enum/cookie-keys";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Set in .env
 
 const axiosConfig = axios.create({
@@ -15,8 +21,10 @@ axiosConfig.interceptors.request.use(
     const accessToken = await getAccessTokenCookie();
     console.log("CHECKING TOKEN: ", accessToken);
     if (accessToken) {
-      config.headers["Cookie"] = `Bearer ${accessToken}`;
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+      config.headers["Cookie"] = `${COOKIE_KEYS.ACCESS_TOKEN}=${accessToken}`;
+      config.headers[
+        "Authorization"
+      ] = `${COOKIE_KEYS.ACCESS_TOKEN}=${accessToken}`;
     }
 
     // Do something before request is sent
@@ -42,6 +50,7 @@ axiosConfig.interceptors.response.use(
       case 404:
         break;
       case 401:
+        return await handleRenewToken(error);
         // Refetch token with access token
         break;
       case 500:
@@ -54,53 +63,6 @@ axiosConfig.interceptors.response.use(
   }
 );
 
-export const axiosConfigWithoutAuth = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-export const axiosSupabaseConfig = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-axiosSupabaseConfig.interceptors.response.use(
-  function (response: AxiosResponse) {
-    return response.data;
-  },
-  async function (error) {
-    return Promise.reject(error);
-  }
-);
-
-const renewToken = async () => {
-  // const refreshTokenFromSession = sessionStorage.getItem(
-  //   COOKIE_KEYS.REFRESH_TOKEN
-  // );
-  // const refreshTokenFromLocal = localStorage.getItem(COOKIE_KEYS.REFRESH_TOKEN);
-
-  // const res: UserCredential = await refreshTokenFunction({
-  //   token: refreshTokenFromLocal ?? refreshTokenFromSession ?? "",
-  // });
-  // saveToStorages(
-  //   COOKIE_KEYS.ACCESS_TOKEN,
-  //   res.token,
-  //   Boolean(refreshTokenFromLocal)
-  // ); // if refreshToken is store from local === the session is save
-  // saveToStorages(
-  //   COOKIE_KEYS.REFRESH_TOKEN,
-  //   res.refresh_token,
-  //   Boolean(refreshTokenFromLocal)
-  // ); // if refreshToken is store from local === the session is save
-
-  // return res.token;
-  return "";
-};
-
 const handleRenewToken = async (error: unknown) => {
   if (!(error instanceof AxiosError)) {
     return;
@@ -110,8 +72,28 @@ const handleRenewToken = async (error: unknown) => {
   if (!originalRequest) {
     return;
   }
-  const newAccessToken = await renewToken();
-  originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+  const saveSession = await getSaveSessionCookie();
+  const refreshToken = await getRefreshTokenCookie();
+  console.log(`GET REFRESH TOKEN: ${refreshToken}`);
+  if (!refreshToken) {
+    return;
+  }
+  const newAccessToken = await refreshTokenAction(
+    { token: refreshToken },
+    saveSession === "true" ? true : false
+  );
+  console.log(
+    `CHECK REFRESH TOKEN ACTION: ${newAccessToken.data?.access_token}`
+  );
+
+  if (!newAccessToken.data) {
+    console.log(`No Access token`);
+    return;
+  }
+  // originalRequest.headers.Authorization = `Bearer ${newAccessToken.token}`;
+  originalRequest.headers[
+    "Cookie"
+  ] = `${COOKIE_KEYS.ACCESS_TOKEN}=${newAccessToken.data.access_token}`;
   return await axiosConfig(originalRequest);
 };
 

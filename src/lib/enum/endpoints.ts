@@ -1,3 +1,4 @@
 export enum AUTH_ENDPOINTS {
-  LOGIN = "/login",
+  LOGIN = "/auth/login",
+  REFRESH_TOKEN = "/auth/refresh",
 }
