@@ -1,8 +1,10 @@
+import { testAction } from "@/actions/test";
 import React from "react";
 
 type Props = {};
 
-const TestPage = (props: Props) => {
+const TestPage = async (props: Props) => {
+  const res = await testAction();
   return <div>TestPage</div>;
 };
 

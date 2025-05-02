@@ -24,6 +24,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { logoutAction } from "@/actions/auth";
+import { useTransition } from "react";
+import { cn } from "@/lib/utils";
 
 export function NavUser({
   user,
@@ -34,11 +37,15 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const [isPending, startTransition] = useTransition();
   return (
-    <SidebarMenu className="w-fit">
+    <SidebarMenu className={cn("w-fit")}>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger
+            asChild
+            className={cn(isPending ? "cursor-progress" : "cursor-pointer")}
+          >
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -95,7 +102,11 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                startTransition(logoutAction);
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>
