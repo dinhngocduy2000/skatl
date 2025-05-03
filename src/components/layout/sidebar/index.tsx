@@ -3,9 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import {
   AudioWaveform,
@@ -174,8 +172,6 @@ export function AppSidebarComponent({
         <NavMain items={data.navMain} />
         <NavProjects items={data.projects} />
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }
