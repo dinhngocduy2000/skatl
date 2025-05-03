@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import React from "react";
 import { NavUser } from "./nav-user";
+import { ThemeToggle } from "./theme-toggle";
 const user = {
   name: "shadcn",
   email: "m@example.com",
@@ -38,7 +39,10 @@ const HeaderComponent = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <NavUser user={user} />
+      <div className="flex gap-4 items-center">
+        <ThemeToggle />
+        <NavUser user={user} />
+      </div>
     </header>
   );
 };

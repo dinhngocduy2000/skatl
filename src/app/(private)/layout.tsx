@@ -6,6 +6,7 @@ import { DefaultMetadata } from "@/lib/utils";
 import ToastProvider from "../toast-provider";
 import HeaderComponent from "@/components/layout/header";
 import { AppSidebarComponent } from "@/components/layout/sidebar";
+import { ThemeProvider } from "../theme-provider";
 
 export const metadata: Metadata = DefaultMetadata;
 const geistSans = Geist({
@@ -22,7 +23,7 @@ export default function AuthenticatedLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta
           name="google-site-verification"
@@ -38,20 +39,26 @@ export default function AuthenticatedLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ToastProvider>
-          <SidebarProvider>
-            <main className="box-border flex h-screen w-screen gap-2 justify-center">
-              <AppSidebarComponent />
-              <SidebarInset>
-                <main className="flex h-full flex-1 flex-col overflow-auto rounded-lg bg-default">
-                  <HeaderComponent />
-                  <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                    {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+          >
+            <SidebarProvider>
+              <main className="box-border flex h-screen w-screen gap-2 justify-center">
+                <AppSidebarComponent />
+                <SidebarInset>
+                  <main className="flex h-full flex-1 flex-col overflow-auto rounded-lg bg-default">
+                    <HeaderComponent />
+                    <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                      {children}
+                    </main>
+                    {/* <FooterComponent /> */}
                   </main>
-                  {/* <FooterComponent /> */}
-                </main>
-              </SidebarInset>
-            </main>
-          </SidebarProvider>
+                </SidebarInset>
+              </main>
+            </SidebarProvider>
+          </ThemeProvider>
         </ToastProvider>
       </body>
     </html>

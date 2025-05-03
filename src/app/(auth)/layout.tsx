@@ -4,6 +4,7 @@ import { DefaultMetadata } from "@/lib/utils";
 import ToastProvider from "../toast-provider";
 import Logo from "../../assets/svg/skatl-logo.svg";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "../theme-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,7 +24,7 @@ export default function LoginLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta
           name="google-site-verification"
@@ -38,14 +39,21 @@ export default function LoginLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main className="flex h-screen w-screen items-center justify-center bg-muted">
-          <ToastProvider>
-            <div className="bg-muted w-full flex min-h-dvh flex-col items-center p-6 py-0">
-              <div className="flex w-full items-center max-w-sm flex-col">
-                <Logo className="w-[10vw] h-[10vw] min-w-[100px] min-h-[100px] max-h-fit max-w-fit" />
-                {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ToastProvider>
+              <div className="bg-muted w-full flex min-h-dvh flex-col items-center p-6 py-0">
+                <div className="flex w-full items-center max-w-sm flex-col">
+                  <Logo className="w-[10vw] h-[10vw] min-w-[100px] min-h-[100px] max-h-fit max-w-fit" />
+                  {children}
+                </div>
               </div>
-            </div>
-          </ToastProvider>
+            </ToastProvider>
+          </ThemeProvider>
         </main>
       </body>
     </html>
