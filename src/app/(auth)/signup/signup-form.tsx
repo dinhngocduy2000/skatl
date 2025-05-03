@@ -10,14 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { LoginFields, loginSchema } from "@/lib/schemas/login-schema";
 import { toast } from "react-toastify";
 import FormInputContainer from "@/components/reusable/form-input-container";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ROUTE_PATH } from "@/lib/enum/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginAction, signUpAction } from "@/actions/auth";
+import { signUpAction } from "@/actions/auth";
 import { SignupSchema } from "@/lib/schemas/signup-schema";
 import { ISignupFields } from "@/lib/interfaces/auth";
 export function SignUpForm({
