@@ -1,8 +1,8 @@
 import React from "react";
-import { LoginForm } from "../login/login-form";
+import { SignUpForm } from "./signup-form";
 
 const SignupPage = async () => {
-  return <LoginForm />;
+  return <SignUpForm />;
 };
 
 export default SignupPage;

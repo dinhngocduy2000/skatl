@@ -8,7 +8,6 @@ export interface LoginResponse {
   refresh_token: string;
 }
 
-export type ISignUpParams = Omit<
-  z.infer<typeof SignupSchema>,
-  "confirm_password"
->;
+export type ISignUpParams = Omit<ISignupFields, "confirm_password">;
+
+export type ISignupFields = z.infer<typeof SignupSchema>;
