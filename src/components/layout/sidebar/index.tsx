@@ -34,7 +34,7 @@ const data = {
       plan: "Enterprise",
     },
     {
-      name: "Acme Corp.",
+      name: "Acme Corp",
       logo: AudioWaveform,
       plan: "Startup",
     },
