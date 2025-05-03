@@ -1,16 +1,12 @@
 "use server";
 
 import { refreshToken } from "@/lib/api/auth";
-import { setCookiesAction } from "./cookie";
 import { AxiosError } from "axios";
 
-export const refreshTokenAction = async (
-  params: { token: string },
-  saveSession?: boolean
-) => {
+export const refreshTokenAction = async (params: { token: string }) => {
   try {
     const res = await refreshToken(params);
-    console.log(`CHECK RES REFRESH TOKEN: ${res.access_token}`);
+    console.dir(`CHECK RES REFRESH TOKEN`, res);
     // Set the cookie
     return {
       success: true,

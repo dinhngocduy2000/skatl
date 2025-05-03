@@ -2,7 +2,6 @@ import { LoginFields } from "@/lib/schemas/login-schema";
 import { AUTH_ENDPOINTS } from "@/lib/enum/endpoints";
 import axiosConfig from "..";
 import { LoginResponse } from "@/lib/interfaces/auth";
-import { STORAGE_KEY } from "@/lib/enum/storage-key";
 
 export const handleLogin = async (
   credentials: LoginFields

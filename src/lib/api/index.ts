@@ -1,8 +1,4 @@
-import {
-  getAccessTokenCookie,
-  getRefreshTokenCookie,
-  getSaveSessionCookie,
-} from "@/actions/cookie";
+import { getAccessTokenCookie, getRefreshTokenCookie } from "@/actions/cookie";
 import { refreshTokenAction } from "@/actions/refresh-token";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { COOKIE_KEYS } from "../enum/cookie-keys";
@@ -72,16 +68,12 @@ const handleRenewToken = async (error: unknown) => {
   if (!originalRequest) {
     return;
   }
-  const saveSession = await getSaveSessionCookie();
   const refreshToken = await getRefreshTokenCookie();
   console.log(`GET REFRESH TOKEN: ${refreshToken}`);
   if (!refreshToken) {
     return;
   }
-  const newAccessToken = await refreshTokenAction(
-    { token: refreshToken },
-    saveSession === "true" ? true : false
-  );
+  const newAccessToken = await refreshTokenAction({ token: refreshToken });
   console.log(
     `CHECK REFRESH TOKEN ACTION: ${newAccessToken.data?.access_token}`
   );

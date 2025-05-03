@@ -1,6 +1,6 @@
 "use server";
 
-import { handleLogin, refreshToken } from "@/lib/api/auth";
+import { handleLogin } from "@/lib/api/auth";
 import { LoginFields } from "@/lib/schemas/login-schema";
 import { AxiosError } from "axios";
 import { setCookiesAction } from "./cookie";

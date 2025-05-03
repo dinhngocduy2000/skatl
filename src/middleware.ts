@@ -30,10 +30,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(ROUTE_PATH.LOGIN, request.url));
     }
     // Refresh failed, redirect to login
-    const res = await refreshTokenAction(
-      { token: refreshToken },
-      saveSession === "true" ? true : false
-    );
+    const res = await refreshTokenAction({ token: refreshToken });
     if (!res.data) {
       return;
     }
