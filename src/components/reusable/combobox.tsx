@@ -4,7 +4,7 @@ import { ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll";
 import LoadingSpinner from "./loading-spinner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
