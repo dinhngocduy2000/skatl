@@ -58,7 +58,10 @@ export function KanbanColumn({
   };
 
   return (
-    <Card className="flex flex-col h-full min-h-[500px] overflow-auto">
+    <Card
+      style={{ scrollbarGutter: "stable" }}
+      className="flex flex-col h-full min-h-[500px] overflow-hidden hover:overflow-auto"
+    >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -82,7 +85,7 @@ export function KanbanColumn({
       </CardHeader>
 
       <CardContent
-        className={`flex-1 space-y-3 transition-colors ${
+        className={`flex-1 space-y-3 pr-3 transition-colors ${
           isDragOver ? "bg-muted/50" : ""
         }`}
         onDragOver={handleDragOver}
