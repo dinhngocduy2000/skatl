@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { KanbanColumn } from "@/app/(private)/(home)/(kanban-components)/kanban-column";
-import { Button } from "@/components/ui/button";
-import { Plus, Filter, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Column, Task } from "@/lib/interfaces/kanban";
+import { Column } from "@/lib/interfaces/kanban";
+import KanbanHeaderComponent from "./(kanban-components)/(kanban-header)";
+import KanbanListComponent from "./(kanban-components)/(kanban-list)";
 
 // Sample data
 const initialColumns: Column[] = [
@@ -88,48 +86,6 @@ export default function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const generateId = () => Math.random().toString(36).substr(2, 9);
-
-  const handleAddTask = (columnId: string, taskData: Omit<Task, "id">) => {
-    const newTask: Task = {
-      ...taskData,
-      id: generateId(),
-    };
-
-    setColumns((prev) =>
-      prev.map((column) =>
-        column.id === columnId
-          ? { ...column, tasks: [...column.tasks, newTask] }
-          : column
-      )
-    );
-  };
-
-  const handleMoveTask = (
-    taskId: string,
-    fromColumnId: string,
-    toColumnId: string
-  ) => {
-    setColumns((prev) => {
-      const newColumns = [...prev];
-
-      // Find the task to move
-      const fromColumn = newColumns.find((col) => col.id === fromColumnId);
-      const toColumn = newColumns.find((col) => col.id === toColumnId);
-      const taskToMove = fromColumn?.tasks.find((task) => task.id === taskId);
-
-      if (!fromColumn || !toColumn || !taskToMove) return prev;
-
-      // Remove task from source column
-      fromColumn.tasks = fromColumn.tasks.filter((task) => task.id !== taskId);
-
-      // Add task to destination column
-      toColumn.tasks.push(taskToMove);
-
-      return newColumns;
-    });
-  };
-
   const filteredColumns = columns.map((column) => ({
     ...column,
     tasks: column.tasks.filter(
@@ -144,49 +100,16 @@ export default function KanbanBoard() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold">Task Management</h1>
-              <p className="text-muted-foreground">
-                Organize and track your team&apos;s work
-              </p>
-            </div>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Project
-            </Button>
-          </div>
-
-          {/* Search and filters */}
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search tasks..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </Button>
-          </div>
-        </div>
+        <KanbanHeaderComponent
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
 
         {/* Kanban Board */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredColumns.map((column) => (
-            <KanbanColumn
-              key={column.id}
-              column={column}
-              onAddTask={handleAddTask}
-              onMoveTask={handleMoveTask}
-            />
-          ))}
-        </div>
+        <KanbanListComponent
+          filteredColumns={filteredColumns}
+          setColumns={setColumns}
+        />
 
         {/* Stats */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
