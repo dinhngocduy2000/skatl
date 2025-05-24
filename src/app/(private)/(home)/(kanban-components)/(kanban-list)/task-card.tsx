@@ -19,7 +19,7 @@ export function TaskCard({ task, isDragging }: TaskCardProps) {
 
   return (
     <Card
-      className={`cursor-grab active:cursor-grabbing transition-all duration-200 hover:shadow-md ${
+      className={`cursor-grab min-w-[200px] active:cursor-grabbing transition-all duration-200 hover:shadow-md ${
         isDragging ? "opacity-50 rotate-2 shadow-lg" : ""
       }`}
       draggable
@@ -29,7 +29,9 @@ export function TaskCard({ task, isDragging }: TaskCardProps) {
     >
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-2">
-          <h4 className="font-medium text-sm leading-tight">{task.title}</h4>
+          <h4 className="font-medium text-sm leading-tight line-clamp-2">
+            {task.title}
+          </h4>
           <Badge
             variant="outline"
             className={`text-xs ${priorityColors[task.priority]}`}

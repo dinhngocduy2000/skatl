@@ -82,8 +82,7 @@ export function KanbanColumn({
       </CardHeader>
 
       <CardContent
-        style={{ scrollbarGutter: "stable" }}
-        className={`flex-1 space-y-3 pr-3 transition-colors h-full overflow-hidden hover:overflow-auto ${
+        className={`gutter-container flex-1 space-y-3 pr-3 transition-colors h-full overflow-hidden hover:overflow-auto ${
           isDragOver ? "bg-muted/50" : ""
         }`}
         onDragOver={handleDragOver}

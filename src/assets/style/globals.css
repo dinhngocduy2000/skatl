@@ -128,3 +128,7 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
+.gutter-container {
+  scrollbar-gutter: stable;
+}
