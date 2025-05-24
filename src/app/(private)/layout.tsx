@@ -21,7 +21,7 @@ export default function AuthenticatedLayout({
           <SidebarInset>
             <main className="flex h-full flex-1 flex-col overflow-auto rounded-lg bg-default">
               <HeaderComponent />
-              <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+              <main className="flex overflow-auto flex-1 flex-col gap-4 p-4 pt-0">
                 {children}
               </main>
               {/* <FooterComponent /> */}

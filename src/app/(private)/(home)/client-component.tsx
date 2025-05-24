@@ -98,23 +98,21 @@ export default function KanbanBoard() {
   }));
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <KanbanHeaderComponent
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        />
+    <div className="h-full bg-background p-6 max-w-7xl mx-auto flex flex-col">
+      {/* Header */}
+      <KanbanHeaderComponent
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
 
-        {/* Kanban Board */}
-        <KanbanListComponent
-          filteredColumns={filteredColumns}
-          setColumns={setColumns}
-        />
+      {/* Kanban Board */}
+      <KanbanListComponent
+        filteredColumns={filteredColumns}
+        setColumns={setColumns}
+      />
 
-        {/* Stats */}
-        <KanbanStatsComponent columns={columns} />
-      </div>
+      {/* Stats */}
+      <KanbanStatsComponent columns={columns} />
     </div>
   );
 }

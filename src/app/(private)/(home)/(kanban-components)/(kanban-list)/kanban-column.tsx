@@ -58,7 +58,7 @@ export function KanbanColumn({
   };
 
   return (
-    <Card className="flex flex-col h-full min-h-[500px]">
+    <Card className="flex flex-col h-full min-h-[500px] overflow-auto">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
